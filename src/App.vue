@@ -25,5 +25,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: $color-theme;
-  margin-top: 60px;
+  // margin-top: 60px;
 </style>

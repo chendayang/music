@@ -1,6 +1,6 @@
 <template>
   <div>
-    排行页面
+    歌手页面
   </div>
 </template>
 
