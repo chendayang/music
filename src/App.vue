@@ -1,14 +1,18 @@
 <template>
   <div id="app">
     <mheader></mheader>
+    <tab></tab>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import Mheader from 'components/m-header/m-header'
+import Tab from 'components/tab/tab'
 export default {
   components: {
-    Mheader
+    Mheader,
+    Tab
   }
 }
 </script>
