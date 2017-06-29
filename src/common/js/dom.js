@@ -1,5 +1,5 @@
 export function addClass (el, className) {
-  console.log(hasClass(el, className), 'aaa')
+  // console.log(hasClass(el, className), 'aaa')
   if (hasClass(el, className)) {
     return
   }

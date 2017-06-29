@@ -51,6 +51,9 @@ export default {
             this.slider.refresh()
         })
     },
+    destoryed() {
+        clearTimeout(this.timer)
+    },
     methods: {
     _setSliderWidth(isResize) {
         this.children = this.$refs.sliderGroup.children
@@ -92,7 +95,7 @@ export default {
         })
         this.slider.on('scrollEnd', () => {
             let pageIndex = this.slider.getCurrentPage().pageX
-            console.log(pageIndex, 'pageIndex')
+            // console.log(pageIndex, 'pageIndex')
             if (this.loop) {
                 pageIndex -= 1
             }
