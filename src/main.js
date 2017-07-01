@@ -6,6 +6,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import './common/stylus/index.styl'
+import Vuelazyload from 'vue-lazyload'
+
+Vue.use(Vuelazyload, {
+  loading: require('common/image/music.png')
+})
 
 Vue.config.productionTip = false
 fastclick.attach(document.body)
