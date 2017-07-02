@@ -1,10 +1,5 @@
 <template>
-  <scroll class="listview"
-         :data="data" 
-         ref="listview" 
-         :listenSCroll="listenSCroll"
-         :probeType="probeType"
-         @scroll="scroll">
+  <scroll class="listview" :data="data" ref="listview" :listen-scroll="listenSCroll" :probeType="probeType" @scroll="scroll">
     <ul>
       <li v-for="group in data" class="list-group" ref="listGroup">
         <h2 class="list-group-title">{{group.title}}</h2>
@@ -18,17 +13,14 @@
     </ul>
     <div class="list-shortcut" @touchstart="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove">
       <ul>
-        <li v-for="(item, index) in shortcutList"
-            class="item" 
-            :data-index="index"
-            >{{item}}</li>
+        <li v-for="(item, index) in shortcutList" class="item" :data-index="index" :class="{'current': currentIndex === index}">{{item}}</li>
       </ul>
     </div>
   </scroll>
 </template>
 <script>
 import Scroll from 'base/scroll/scroll'
-import {getData} from 'common/js/dom'
+import { getData } from 'common/js/dom'
 const ANCHOR_HEIGHT = 18
 export default {
   data() {
@@ -47,10 +39,10 @@ export default {
     Scroll
   },
   created() {
+    this.probeType = 3
     this.touch = {}
     this.listenSCroll = true
     this.listHeight = []
-    this.probeType = 3
   },
   computed: {
     shortcutList() {
@@ -100,14 +92,21 @@ export default {
     },
     scrollY(newY) {
       const listHeight = this.listHeight
-      for (let i = 0; i < listHeight.length; i++) {
+      // 当滚动到顶部，newY>0
+      if (newY > 0) {
+        this.currentIndex = 0
+        return
+      }
+      // 在中间部分滚动
+      for (let i = 0; i < listHeight.length - 1; i++) {
         let height1 = listHeight[i]
         let height2 = listHeight[i + 1]
-        if (!height2 || (-newY > height1 && -newY < height2)) {
+        if (-newY >= height1 && -newY < height2) {
           this.currentIndex = i
           return
         }
       }
+      // 当滚动到底部，且-newY大于最后一个元素的上限
       this.currentIndex = 0
     }
   }
