@@ -7,7 +7,7 @@ import App from './App'
 import router from './router'
 import './common/stylus/index.styl'
 import Vuelazyload from 'vue-lazyload'
-
+import store from './store'
 Vue.use(Vuelazyload, {
   loading: require('common/image/music.png')
 })
@@ -18,6 +18,7 @@ fastclick.attach(document.body)
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })
