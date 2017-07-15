@@ -14,13 +14,13 @@ const mutations = {
     state.playlist = list
   },
   [types.SET_SEQUENCE_LIST](state, list) {
-    state.SET_SEQUENCE_LIST = list
+    state.sequenceList = list
   },
   [types.SET_PLAY_MODE](state, mode) {
     state.mode = mode
   },
   [types.SET_CURRENT_INDEX](state, index) {
-    state.SET_CURRENT_INDEX = index
+    state.currentIndex = index
   }
 }
 export default mutations
