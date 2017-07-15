@@ -14,8 +14,8 @@
         </div>
         <div class="middle">
           <div class="middle-l">
-            <div class="cd-wrapper">
-              <div class="cd">
+            <div class="cd-wrapper" ref="cdWrapper">
+              <div class="cd" :class="cdCls">
                 <img :src="currentSong.image" alt="" class="image">
               </div>
             </div>
@@ -30,7 +30,7 @@
               <i class="icon-prev"></i>
             </div>
             <div class="icon i-center">
-              <i class="icon-play"></i>
+              <i :class="playIcon" @click="togglePlaying"></i>
             </div>
             <div class="icon i-right">
               <i class="icon-next"></i>
@@ -45,7 +45,7 @@
     <transition name="mini">
       <div class="mini-player" @click="open" v-show="!fullScreen">
         <div class="icon">
-          <img :src="currentSong.image" width="40" height="40" alt="">
+          <img :class="cdCls" :src="currentSong.image" width="40" height="40" alt="">
         </div>
         <div class="text">
           <h2 class="name" v-html="currentSong.name"></h2>
@@ -53,7 +53,7 @@
         </div>
         <div class="control"></div>
         <div class="control">
-          <i class="icon-playList"></i>
+          <i :class="miniIcon" @click.stop="togglePlaying"></i>
         </div>
       </div>
     </transition>
@@ -66,10 +66,20 @@ import { mapGetters, mapMutations } from 'vuex'
 // import animations from 'create-keyframe-animation'
 export default {
   computed: {
+    playIcon() {
+      return this.playing ? 'icon-pause' : 'icon-play'
+    },
+    miniIcon() {
+      return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
+    },
+    cdCls() {
+      return this.playing ? 'play' : 'play pause'
+    },
     ...mapGetters([
       'fullScreen',
       'playlist',
-      'currentIndex'
+      'currentIndex',
+      'playing'
     ])
   },
   mounted() {
@@ -83,7 +93,8 @@ export default {
       this.setFullScreen(true)
     },
     ...mapMutations({
-      setFullScreen: 'SET_FULL_SCREEN'
+      setFullScreen: 'SET_FULL_SCREEN',
+      setPlayingState: 'SET_PLAYING_STATE'
     }),
     enter(el, done) {
       // const { x, y, scale } = this._getPosAndScale()
@@ -105,6 +116,9 @@ export default {
     },
     afterLeave() {
     },
+    togglePlaying() {
+      this.setPlayingState(!this.playing)
+    },
     _getPosAndScale() {
       const targetWidth = 40
       const paddingLeft = 40
@@ -125,6 +139,12 @@ export default {
     currentSong() {
       this.$nextTick(() => {
         this.$refs.audio.play()
+      })
+    },
+    playing(newPlaying) {
+      const audio = this.$refs.audio
+      this.$nextTick(() => {
+        newPlaying ? audio.play() : audio.pause()
       })
     }
   }
