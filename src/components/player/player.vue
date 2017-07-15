@@ -57,7 +57,7 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url"></audio>
+    <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error"></audio>
   </div>
 </template>
 
@@ -65,6 +65,11 @@
 import { mapGetters, mapMutations } from 'vuex'
 // import animations from 'create-keyframe-animation'
 export default {
+  data() {
+    return {
+      songReady: false
+    }
+  },
   computed: {
     playIcon() {
       return this.playing ? 'icon-pause' : 'icon-play'
@@ -93,24 +98,43 @@ export default {
     open() {
       this.setFullScreen(true)
     },
+    ready() {
+      this.songReady = true
+    },
+    error() {
+    },
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
       setCurrentIndex: 'SET_CURRENT_INDEX'
     }),
     prev() {
+      if (!this.songReady) {
+        return
+      }
       let index = this.currentIndex - 1
       if (index === -1) {
         index = this.playlist.length - 1
       }
       this.setCurrentIndex(index)
+      if (!this.playing) {
+        this.togglePlaying()
+      }
+      this.songReady = false
     },
     next() {
+      if (!this.songReady) {
+        return
+      }
       let index = this.currentIndex + 1
       if (index === this.playlist.length) {
         index = 0
       }
       this.setCurrentIndex(index)
+      if (!this.playing) {
+        this.togglePlaying()
+      }
+      this.songReady = false
     },
     enter(el, done) {
       // const { x, y, scale } = this._getPosAndScale()
